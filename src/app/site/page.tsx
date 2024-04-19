@@ -1,4 +1,15 @@
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { pricingCards } from "@/lib/constants";
+import clsx from "clsx";
+import { Check } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -20,6 +31,58 @@ export default function Home() {
             className="rounded-tl-2xl rounded-tr-2xl border-2 border-muted"
           />
           <div className="bottom-o top-[50%] bg-gradient-to-t dark:from-background left-0 right-0 absolute z-10"></div>
+        </div>
+      </section>
+      <section className="flex justify-center items-center flex-col gap-4 md:mt-40">
+        <h2 className="text-4xl text-center">Choose what fits you right</h2>
+        <p className="text-muted-foreground text-center">
+          Our straight forward pricing plans are tailored to meet your needs. If{" "}
+          {"you're"} not <br /> ready to commit you can get started for free.
+        </p>
+        <div className="flex justify-center gap-4 flex-wrap mt-6">
+          //WIP: Wire up free product from stripe
+          {pricingCards.map((card) => (
+            <Card
+              key={card.title}
+              className={clsx("w-[300px] flex flex-col justify-between", {
+                "border-2 border-primary": card.isPopular,
+              })}
+            >
+              <CardHeader>
+                {" "}
+                <CardTitle
+                  className={clsx("", {
+                    "text-muted-foreground": !card.isPopular,
+                  })}
+                >
+                  {card.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <span className="text-4xl font-bold">{card.price}</span>
+                <span className="text-muted-foreground">/m</span>
+              </CardContent>
+              <CardFooter className="flex flex-col items-start gap-4">
+                <div>
+                  {card.features.map((feature) => (
+                    <div key={feature} className="flex gap-2 items-center">
+                      <Check className="text-muted-foreground" />
+                      <p>{feature}</p>
+                    </div>
+                  ))}
+                </div>
+                <Link
+                  href={`/agency?plan=${card.priceId}`}
+                  className={clsx(
+                    "w-full text-center bg-primary p-2 rounded-md",
+                    { "!bg-muted-foreground": !card.isPopular }
+                  )}
+                >
+                  Get Started
+                </Link>
+              </CardFooter>
+            </Card>
+          ))}
         </div>
       </section>
     </>
